@@ -108,7 +108,7 @@ export default function Navbar() {
               </li>
               <li>
                 <NavLink className="nav-link" onClick={signOut}>
-                  SignOut
+                  {localStorage.getItem("tkn") ? "SignOut" : "log In"}
                 </NavLink>
               </li>
             </ul>
