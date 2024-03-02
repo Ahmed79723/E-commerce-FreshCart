@@ -1,0 +1,102 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@300&display=swap");
+:root {
+  --main-color: #0aad0a;
+  --light-color: #f0f3f2;
+  --shadow: rgba(145, 158, 171, 0.2) 0px 2px 4px -1px,
+    rgba(145, 158, 171, 0.14) 0px 4px 5px 0px,
+    rgba(145, 158, 171, 0.12) 0px 1px 10px 0px;
+  --font-family: "Encode Sans Expanded", sans-serif;
+  --rating-color: #ffc908;
+}
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
+body {
+  font-family: var(--font-family) !important;
+}
+.rating-color {
+  color: var(--rating-color);
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+a,
+a:hover {
+  color: black;
+  text-decoration: none;
+}
+.product:hover {
+  box-shadow: var(--shadow);
+  border: solid 1px var(--main-color);
+}
+.product .btn {
+  transition: transform 1s, opacity 1s;
+  transform: translateY(100%);
+  opacity: 0;
+}
+.product:hover .btn {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.font-sm {
+  font-size: 14px;
+}
+.text-main {
+  color: var(--main-color);
+}
+.bg-main {
+  background-color: var(--main-color) !important;
+}
+.bg-main-light {
+  background-color: var(--light-color) !important;
+}
+.badge {
+  left: 88% !important;
+  top: 7% !important;
+}
+.navbar-nav .nav-link.active {
+  color: #0aad0a;
+  font-weight: bolder;
+}
+.offline {
+  position: fixed;
+  left: 2%;
+  bottom: 8%;
+  border-radius: 20px;
+  background-color: #0000008e;
+  padding: 10px 50px;
+}
+.brdr {
+  border: solid 1px #0aad0a;
+}
+.order {
+  width: fit-content;
+}
+.ordr-brdr {
+  border: solid 5px #0aad0a !important;
+}
+#whish-btn {
+  top: 2%;
+  right: 10%;
+  opacity: 0;
+  transition: all 1s;
+}
+.product:hover #whish-btn {
+  opacity: 1 !important;
+}
+#whish-btn i {
+  color: black;
+  transition: all 0.5s;
+}
+#whish-btn:hover i {
+  color: red;
+}
+.f-pass{
+  transition: all 0.5s;
+}
+.f-pass:hover{
+color: #0aad0a;
+}
