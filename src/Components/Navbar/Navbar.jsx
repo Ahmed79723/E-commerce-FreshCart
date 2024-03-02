@@ -75,7 +75,9 @@ export default function Navbar() {
               <li>
                 <NavLink className="nav-link" to="/Profile">
                   <i className="fa-solid fa-user mx-1"></i>
-                  <span className="fw-bold text-main">{`HI, ` + userInfo.name}</span>
+                  <span className="fw-bold text-main">
+                    {userInfo?.name ? `HI, ` + userInfo.name : ""}
+                  </span>
                 </NavLink>
               </li>
               <li>
