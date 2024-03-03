@@ -6,7 +6,7 @@ import { cartContext } from "../Context/CartContextProvider";
 import { wishListContext } from "../Context/WishListContext";
 
 export default function Navbar() {
-  const { setToken ,userInfo } = useContext(authContext);
+  const { setToken, userInfo } = useContext(authContext);
   const { counter, setCounter, getCart } = useContext(cartContext);
   const { wishCount } = useContext(wishListContext);
   const navigate = useNavigate();

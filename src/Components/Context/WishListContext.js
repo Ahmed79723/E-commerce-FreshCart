@@ -63,6 +63,7 @@ export default function WishListContextProvider({ children }) {
         }
       );
       console.log(data);
+      toast.success(data.message);
       return data;
     } catch (err) {
       toast.error(err.message);
