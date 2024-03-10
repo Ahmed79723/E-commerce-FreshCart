@@ -123,7 +123,8 @@ export default function Login() {
               </div>
             </div>
           </div>
-          <Link className="f-pass fw-bold" to={'/ForgotPass'}>Forgot Password?</Link>
+          <Link className="f-pass fw-bold mb-2" to={'/ForgotPass'}>Forgot Password?</Link> <br />
+          <Link className="f-pass fw-bold" to={'/Register'}>Don't have an Account ? Sign Up</Link>
           <button
             disabled={!(myFormik.dirty && myFormik.isValid)}
             type="submit"
