@@ -4,26 +4,35 @@ import { cartContext } from "../Context/CartContextProvider";
 import { toast } from "react-toastify";
 import { authContext } from "../Context/AuthContextProvider";
 import { wishListContext } from "../Context/WishListContext";
+import Cookies from "js-cookie";
+
 // import { useQuery } from "react-query";
 
 export default function Product({ item }) {
-  const { setCounter, addToCart, BtnLoading, setBtnLoading } =
+  const { setCounter, addToCart, setBtnLoading, getWhish } =
     useContext(cartContext);
   const { Token } = useContext(authContext);
-  const { addWishProduct } = useContext(wishListContext);
+  const { addWishProduct, removeWish } = useContext(wishListContext);
   const nv = useNavigate();
   let [add2Wish, setAdd2Wish] = useState(false);
+  let [flag, setFlag] = useState(false);
 
   const truncateTitle = (title, numWords) => {
-		const words = title.split(" ");
-		return words.length > numWords
-			? words.slice(0, numWords).join(" ") + "..."
-			: title;
-	};
+    const words = title.split(" ");
+    return words.length > numWords
+      ? words.slice(0, numWords).join(" ") + "..."
+      : title;
+  };
 
   async function addWish(id) {
     setAdd2Wish(true);
-    let res = await addWishProduct(id);
+    await addWishProduct(id);
+    setAdd2Wish(false);
+  }
+
+  async function removeWishProduct(id) {
+    setAdd2Wish(true);
+    await removeWish(id);
     setAdd2Wish(false);
   }
 
@@ -56,14 +65,27 @@ export default function Product({ item }) {
         <div className="product rounded-3 p-3 overflow-hidden">
           <div id="whish-btn" className="rounded-circle position-absolute p-1">
             <button
+              className={
+                flag
+                  ? "rounded-circle border-0 bg-danger"
+                  : "rounded-circle border-0 bg-transparent"
+              }
               disabled={add2Wish}
               onClick={() => {
-                addWish(item._id);
+                if (!flag) {
+                  addWish(item._id);
+                  Cookies.set("isWhishListed", "true");
+                  setFlag(true);
+                } else {
+                  setFlag(false);
+                  removeWishProduct(item._id);
+                  Cookies.set("isWhishListed", "false");
+                }
+                console.log(Cookies.get("isWhishListed"));
               }}
-              className="rounded-circle border-0 bg-transparent"
             >
               {add2Wish ? (
-                <i className="fa-solid fa-spin fa-spinner text-black"></i>
+                <i className="fa-solid fa-spin fa-spinner"></i>
               ) : (
                 <i className="fa-solid fa-heart fa-lg"></i>
               )}
@@ -73,8 +95,8 @@ export default function Product({ item }) {
             <img src={item.imageCover} className="w-100 rounded-5" alt="" />
             <span className="text-main font-sm">{item.category.name}</span>
             <h6 className="my-1 fw-bold">
-              {/* {item.title.split(" ").splice(0, 2).join(" ")} */}
-              {truncateTitle(item.title,3)}
+              {/* {item.title.split(" ").splice(0, 3).join(" ") + "..."} */}
+              {truncateTitle(item.title, 3)}
             </h6>
             <div className="d-flex justify-content-between align-items-center my-2">
               <div className="price">{item.price} EGP</div>

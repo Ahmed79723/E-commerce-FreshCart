@@ -55,7 +55,7 @@ export default function Login() {
   });
 
   function onSubmit(values) {
-    console.log('from login',values);
+    console.log("from login", values);
     sendData(values);
   }
 
@@ -69,7 +69,7 @@ export default function Login() {
       <Helmet>
         <title>Login</title>
       </Helmet>
-      <div className="w-75 p-5 m-auto">
+      <div className="w-75 p-5 mx-auto">
         <h2 className="fw-bold mb-3">Login :</h2>
         <div className="title-bar__products mt-1"></div>
         <form onSubmit={myFormik.handleSubmit}>
@@ -123,8 +123,10 @@ export default function Login() {
               </div>
             </div>
           </div>
-          <Link className="f-pass fw-bold mb-2" to={'/ForgotPass'}>Forgot Password?</Link> <br />
-          <Link className="f-pass fw-bold" to={'/Register'}>Don't have an Account ? Sign Up</Link>
+          <Link className="f-pass fw-bold mb-2" to={"/ForgotPass"}>
+            Forgot Password?
+          </Link>{" "}
+          <br />
           <button
             disabled={!(myFormik.dirty && myFormik.isValid)}
             type="submit"
@@ -151,6 +153,17 @@ export default function Login() {
             ""
           )}
         </form>
+        <div className="d-flex justify-content-between align-content-center mt-2 mx-auto text-center">
+          <span className="bg-dark w-25 ms-auto align-self-center" style={{height:'2px'}}></span>
+          <Link
+            className="f-pass fw-bold text-center align-self-center px-2"
+            to={"/Register"}
+          >
+            <span className="text-nowrap">Don't have an Account, </span>
+            <span className="text-nowrap">Sign Up?</span>
+          </Link>
+          <span className="bg-dark w-25 me-auto align-self-center " style={{height:'2px'}}></span>
+        </div>
       </div>
     </>
   );

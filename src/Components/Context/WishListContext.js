@@ -69,7 +69,8 @@ export default function WishListContextProvider({ children }) {
         }
       );
       console.log(data);
-      toast.success(data.message);
+      toast.warning("Product removed successfully from your wishlist");
+      getWhish();
       return data;
     } catch (err) {
       toast.error(err.message);
