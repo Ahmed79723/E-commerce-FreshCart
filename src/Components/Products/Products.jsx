@@ -49,7 +49,9 @@ export default function Products() {
     console.log(search);
     // let cartona = ``;
     for (var i = 0; i < data?.data.data.length; i++) {
-      if (data?.data.data[i].title.toLowerCase().includes(search?.toLowerCase())) {
+      if (
+        data?.data.data[i].title.toLowerCase().includes(search?.toLowerCase())
+      ) {
         // let item = ProductsList[i];
         searchRes.push(data?.data.data[i]);
         setProductsList(searchRes);
@@ -114,6 +116,8 @@ export default function Products() {
       </Helmet>
       <div className="container-fluid px-5">
         <div className="py-4"></div>
+        <h2 className="pt-5 text-center">All Products</h2>
+        <div className="title-bar__products mt-1 mx-auto"></div>
         <input
           id="searchInput"
           // onKeyUp={() => {
@@ -127,7 +131,7 @@ export default function Products() {
           placeholder="Search..."
           type="text"
         />
-        <div id="Products" className="row gy-2 pt-5">
+        <div id="Products" className="row gy-4 pt-5">
           {flag
             ? ProductsList?.map((item) => {
                 // flag = false;

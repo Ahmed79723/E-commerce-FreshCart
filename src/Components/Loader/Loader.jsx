@@ -1,13 +1,14 @@
 import React from "react";
-
+import { InfinitySpin } from "react-loader-spinner";
 export default function Loader() {
   return (
-    <>
-      <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="Loader">
-          <i className="fa-solid fa-spin fa-spinner fa-5x text-main"></i>
-        </div>
-      </div>
-    </>
+    <div className="d-flex justify-content-center align-items-center vh-100">
+      <InfinitySpin
+        visible={true}
+        width="200"
+        color="#0aad0a"
+        ariaLabel="infinity-spin-loading"
+      />
+    </div>
   );
 }

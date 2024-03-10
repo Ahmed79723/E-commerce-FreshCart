@@ -11,8 +11,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import "./index.css";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { QueryClient, QueryClientProvider } from "react-query";
-const root = ReactDOM.createRoot(document.getElementById("root"));
 const queryClient = new QueryClient();
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <QueryClientProvider client={queryClient}>
     <App />

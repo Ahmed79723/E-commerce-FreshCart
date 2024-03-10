@@ -70,12 +70,13 @@ export default function Login() {
         <title>Login</title>
       </Helmet>
       <div className="w-75 p-5 m-auto">
-        <h2>Login :</h2>
+        <h2 className="fw-bold mb-3">Login :</h2>
+        <div className="title-bar__products mt-1"></div>
         <form onSubmit={myFormik.handleSubmit}>
           <div className="row gy-3">
             <div className="col-12">
               <div>
-                <label htmlFor="email">email</label>
+                <label htmlFor="email">Email</label>
                 <input
                   onBlur={myFormik.handleBlur}
                   onChange={myFormik.handleChange}
@@ -99,7 +100,7 @@ export default function Login() {
             </div>
             <div className="col-12">
               <div>
-                <label htmlFor="password">password</label>
+                <label htmlFor="password">Password</label>
                 <input
                   onBlur={myFormik.handleBlur}
                   onChange={myFormik.handleChange}

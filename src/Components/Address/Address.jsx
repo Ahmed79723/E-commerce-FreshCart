@@ -15,8 +15,8 @@ export default function Address() {
   const [isCash, setIsCash] = useState(false);
   const [isOnline, setisOnline] = useState(false);
   const { id } = useParams();
-  // const [isFalse, setIsisFalse] = useState(false);
   const [Loading, setLoading] = useState(false);
+  // const [isFalse, setIsisFalse] = useState(false);
   // const [errApiMsg] = useState(undefined);
   // const nav = useNavigate();
 

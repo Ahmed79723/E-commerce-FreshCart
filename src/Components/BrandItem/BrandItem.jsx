@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function BrandItem({ item, fun }) {
   return (
@@ -10,7 +10,7 @@ export default function BrandItem({ item, fun }) {
             fun(item._id);
           }}
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          data-bs-target={`#${item.name}`}
         >
           <div className="card product d-flex flex-column">
             <div className="card-body d-flex justify-content-center">
@@ -19,9 +19,10 @@ export default function BrandItem({ item, fun }) {
             <p className="card-text px-5 py-3 text-center">{item.name}</p>
           </div>
         </div>
+
         <div
           className="modal fade"
-          id="exampleModal"
+          id={item.name}
           tabIndex={-1}
           aria-labelledby="exampleModalLabel"
           aria-hidden="true"
@@ -36,11 +37,22 @@ export default function BrandItem({ item, fun }) {
                   aria-label="Close"
                 />
               </div>
-              <div className="modal-body d-flex justify-content-between">
-                <h3 className="fw-bolder text-main pt-5 text-center">
-                  {item.name}
-                </h3>
-                <img src={item.image} alt={item.slug} className="w-100" />
+              <div className="modal-body">
+                <div className="d-flex flex-column align-items-center justify-content-between">
+                  <h3 className="fw-bolder text-main pt-5">
+                    {item.name}
+                  </h3>
+                  <img src={item.image} alt={item.slug} className="w-100" />
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Maxime fuga quibusdam voluptates tenetur! Beatae a
+                    accusantium voluptatem saepe iure officia quis aperiam sit
+                    iste repellendus. Consequatur deleniti aliquid harum animi
+                    sunt nulla unde mollitia ex laborum provident itaque ad,
+                    distinctio nihil, numquam ratione dolore enim culpa, eum
+                    sequi eligendi laudantium!
+                  </p>
+                </div>
               </div>
               <div className="modal-footer">
                 <button

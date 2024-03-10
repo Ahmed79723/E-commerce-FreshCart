@@ -4,9 +4,11 @@ import { useFormik } from "formik";
 import { Helmet } from "react-helmet";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function ResetPass() {
   const [isUpdated, setIsUpdated] = useState(false);
+  const nv = useNavigate();
 
   async function ResetPass(email, newPassword) {
     setIsUpdated(true);
@@ -20,7 +22,7 @@ export default function ResetPass() {
         if (res.data.token) {
           toast.success("Password updated successfully!");
           setTimeout(() => {
-            window.location = "http://localhost:3000/#/Login";
+            nv("/Login")
           }, 1000);
           setIsUpdated(false);
         }

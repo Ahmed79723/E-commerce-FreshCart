@@ -4,9 +4,11 @@ import { useFormik } from "formik";
 import { Helmet } from "react-helmet";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function ResetCode() {
   const [isSuccess, setIsSuccess] = useState(false);
+  const nv = useNavigate();
 
   async function ResetCode(resetCode) {
     setIsSuccess(true)
@@ -19,7 +21,7 @@ export default function ResetCode() {
         toast.success(response.data.message);
         setIsSuccess(false);
         setTimeout(() => {
-          window.location = "http://localhost:3000/#/ResetPass";
+          nv("/ResetPass")
         }, 1000);
       })
       .catch(function (err) {

@@ -7,28 +7,39 @@ import { wishListContext } from "../Context/WishListContext";
 // import { useQuery } from "react-query";
 
 export default function Product({ item }) {
-  const { setCounter, addToCart,BtnLoading, setBtnLoading } = useContext(cartContext);
+  const { setCounter, addToCart, BtnLoading, setBtnLoading } =
+    useContext(cartContext);
   const { Token } = useContext(authContext);
-  const { addWishProduct, loading, setLoading } = useContext(wishListContext);
+  const { addWishProduct } = useContext(wishListContext);
   const nv = useNavigate();
+  let [add2Wish, setAdd2Wish] = useState(false);
+
+  const truncateTitle = (title, numWords) => {
+		const words = title.split(" ");
+		return words.length > numWords
+			? words.slice(0, numWords).join(" ") + "..."
+			: title;
+	};
 
   async function addWish(id) {
+    setAdd2Wish(true);
     let res = await addWishProduct(id);
+    setAdd2Wish(false);
   }
 
   async function addProductToCart(id) {
     if (Token) {
-      setBtnLoading(true);
+      setAdd2Wish(true);
       let res = await addToCart(id);
       console.log(res);
       if (res.status == "success") {
         setBtnLoading(false);
         setCounter(res.numOfCartItems);
       }
-      setBtnLoading(false);
+      setAdd2Wish(false);
     } else {
       toast.error("Please Log In First");
-      setBtnLoading(false);
+      setAdd2Wish(false);
       setTimeout(() => {
         nv("/Login");
       }, 1500);
@@ -41,22 +52,29 @@ export default function Product({ item }) {
   // console.log(data?.data.data);
   return (
     <>
-      <div className="col-md-2 position-relative overflow-hidden">
-        <div className="product rounded-3 p-3">
-          <button
-            id="whish-btn"
-            onClick={() => {
-              addWish(item._id);
-            }}
-            className="position-absolute rounded-circle bg-main-light"
-          >
-            <i className="fa-solid fa-heart"></i>
-          </button>
+      <div className="col-md-3 position-relative">
+        <div className="product rounded-3 p-3 overflow-hidden">
+          <div id="whish-btn" className="rounded-circle position-absolute p-1">
+            <button
+              disabled={add2Wish}
+              onClick={() => {
+                addWish(item._id);
+              }}
+              className="rounded-circle border-0 bg-transparent"
+            >
+              {add2Wish ? (
+                <i className="fa-solid fa-spin fa-spinner text-black"></i>
+              ) : (
+                <i className="fa-solid fa-heart fa-lg"></i>
+              )}
+            </button>
+          </div>
           <Link to={`/ProDetails/${item.id}`}>
-            <img src={item.imageCover} className="w-100" alt="" />
+            <img src={item.imageCover} className="w-100 rounded-5" alt="" />
             <span className="text-main font-sm">{item.category.name}</span>
             <h6 className="my-1 fw-bold">
-              {item.title.split(" ").splice(0, 2).join(" ")}
+              {/* {item.title.split(" ").splice(0, 2).join(" ")} */}
+              {truncateTitle(item.title,3)}
             </h6>
             <div className="d-flex justify-content-between align-items-center my-2">
               <div className="price">{item.price} EGP</div>
@@ -71,9 +89,9 @@ export default function Product({ item }) {
               addProductToCart(item.id);
             }}
             className="btn bg-main w-100 text-white"
-            disabled={BtnLoading}
+            disabled={add2Wish}
           >
-            {BtnLoading ? (
+            {add2Wish ? (
               <i className="fa-solid fa-spin fa-spinner text-white"></i>
             ) : (
               "Add to Cart"

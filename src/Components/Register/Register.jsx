@@ -106,7 +106,8 @@ export default function Register() {
         <title>Register</title>
       </Helmet>
       <div className="w-75 p-5 m-auto">
-        <h2>Register :</h2>
+        <h2 className="fw-bold mb-3">Register :</h2>
+        <div className="title-bar__products mt-1"></div>
         <form onSubmit={myFormik.handleSubmit} action="">
           <div className="row gy-3">
             <div className="col-12">

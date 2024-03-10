@@ -3,11 +3,10 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { authContext } from "./AuthContextProvider";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-// import { useQuery } from "react-query";
 export let cartContext = createContext();
+// import { useQuery } from "react-query";
 
 export default function CartContextProvider({ children }) {
-  //   const cartQuery = useQuery("addToCart", addToCart);
   const [counter, setCounter] = useState(0);
   const { Token } = useContext(authContext);
   const [allProducts, setAllProducts] = useState(null);
@@ -16,7 +15,8 @@ export default function CartContextProvider({ children }) {
   const [CartOwner, setCartOwner] = useState(null);
   let [Loading, setLoading] = useState(true);
   const [BtnLoading, setBtnLoading] = useState(false);
- 
+  //   const cartQuery = useQuery("addToCart", addToCart);
+
   function getCart() {
     return axios
       .get("https://ecommerce.routemisr.com/api/v1/cart", {
@@ -35,7 +35,8 @@ export default function CartContextProvider({ children }) {
         console.log("getCart Error", err);
         if (err.response?.data.message) {
           const fullString = err.response?.data?.message;
-          const [body, ID] = fullString.split(":");
+          const [body, ID] = fullString.split(": ");
+          // console.log(ID);
           setCartOwner(ID);
         }
         setLoading(false);
@@ -56,13 +57,16 @@ export default function CartContextProvider({ children }) {
         );
         toast.success("Product Added successfully to Cart");
         getCart();
-        return data;
+        return data
       } catch (err) {
-        toast.error(err.response.data.message);
-        return err;
+        // Handle errors for non-successful responses
+        if (err.response.data.message) {
+          toast.error(err.response.data.message);
+        } else {
+          // Handle errors for non-successful responses
+          console.error("failed(network):", err.message);
+        }
       }
-    } else {
-      toast.error("Please Log In First");
     }
   }
 
@@ -163,7 +167,8 @@ export default function CartContextProvider({ children }) {
         setCounter,
         setTotalCartPrice,
         setLoading,
-        BtnLoading, setBtnLoading
+        BtnLoading,
+        setBtnLoading,
       }}
     >
       {children}

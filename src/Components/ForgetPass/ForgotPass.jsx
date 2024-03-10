@@ -4,8 +4,10 @@ import { Helmet } from "react-helmet";
 import * as yup from "yup";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function ForgotPass() {
+  const nv = useNavigate();
   const [isSuccess, setIsSuccess] = useState(false);
 
   async function forgotPassword(email) {
@@ -18,7 +20,7 @@ export default function ForgotPass() {
         toast.success(response.data.message);
         setIsSuccess(false);
         setTimeout(() => {
-          window.location = "http://localhost:3000/#/ResetCode";
+          nv("/ResetCode")
         }, 1000);
       })
       .catch(function (err) {

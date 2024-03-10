@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Slider from "react-slick";
 import { useQuery } from "react-query";
 import Loader from "../Loader/Loader";
+import { wishListContext } from "../Context/WishListContext";
+import { Link } from "react-router-dom";
 
 export default function Categories() {
   // const [Categories, setCategories] = useState([]);
@@ -16,11 +18,11 @@ export default function Categories() {
   // useEffect(() => {
   //   getCategories();
   // }, []);
-  async function fetchCategories() {
-    return await axios.get("https://ecommerce.routemisr.com/api/v1/categories");
-  }
-  const { isLoading, data } = useQuery("categories", fetchCategories);
-  // console.log(data);
+
+  const { getOneCat, allCats } = useContext(wishListContext);
+
+  // const { isLoading, data } = useQuery("categories", fetchCategories);
+  console.log(allCats);
   var settings = {
     dots: false,
     infinite: true,
@@ -36,40 +38,54 @@ export default function Categories() {
           slidesToShow: 3,
           slidesToScroll: 3,
           infinite: true,
-          dots: true
-        }
+          dots: true,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 1
-        }
+          initialSlide: 1,
+        },
       },
       {
         breakpoint: 480,
         settings: {
           slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+          slidesToScroll: 1,
+        },
+      },
+    ],
     // rows: 2
   };
-  if (isLoading) return <Loader />;
+  if (!allCats) return <Loader />;
   return (
     <>
       <div className="container-fluid px-5">
         <div className="pt-5">
           <h2 className="pt-5">Popular Categories :</h2>
+          <div className="title-bar__products mt-1"></div>
           <Slider {...settings}>
-            {data?.data.data.map((item, index) => {
+            {allCats.map((item, index) => {
               return (
-                <div className="px-1" key={index}>
-                  <img src={item.image} height={200} className="w-100" alt="" />
-                  <h6 className="fw-bold">{item.name}</h6>
-                </div>
+                <Link
+                role="button"
+                onClick={() => {
+                  getOneCat(item._id);
+                }}
+                to={`/CatDetails/${item._id}`}
+                  className="px-1"
+                  key={index}
+                >
+                  <img
+                    src={item.image}
+                    height={200}
+                    className="w-100 rounded-3 shadow-sm"
+                    alt=""
+                  />
+                  <h6 className="text-center fw-bold">{item.name}</h6>
+                </Link>
               );
             })}
           </Slider>

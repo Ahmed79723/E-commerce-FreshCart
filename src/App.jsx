@@ -1,7 +1,6 @@
 import React from "react";
 import {
   RouterProvider,
-  createBrowserRouter,
   createHashRouter,
 } from "react-router-dom";
 import Layout from "./Components/Layout/Layout";
@@ -28,6 +27,7 @@ import ForgotPass from "./Components/ForgetPass/ForgotPass";
 import ResetCode from "./Components/ResetCode/ResetCode";
 import ResetPass from "./Components/ResetPass/ResetPass";
 import ECategories from "./Components/ECategories/ECategories";
+import CatDetails from "./Components/CatDetails/CatDetails";
 const myRouting = createHashRouter([
   {
     path: "/",
@@ -38,6 +38,7 @@ const myRouting = createHashRouter([
       { path: "/Products", element: <Products /> },
       { path: "/ProDetails/:id", element: <ProDetails /> },
       { path: "/Categories", element: <ECategories /> },
+      { path: "/CatDetails/:id", element: <CatDetails /> },
       { path: "/Brands", element: <Brands /> },
       {
         path: "/Cart",

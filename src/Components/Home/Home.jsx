@@ -10,11 +10,10 @@ export default function Home() {
       <Helmet>
         <title>Home</title>
       </Helmet>
-      <div className="pt-4 container-fluid px-5">
         <MainSlider />
+      <div className="pt-4 container-fluid px-5">
       </div>
       <Categories />
-      {/* <input type="text" className="form-control" id="searchInput" value={''} onChange={} /> */}
       <Products />
     </>
   );
