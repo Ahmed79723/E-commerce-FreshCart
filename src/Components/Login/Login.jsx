@@ -145,7 +145,7 @@ export default function Login() {
           )}
           {isSuccess ? (
             <div className="alert alert-success my-1 p-1 text-center">
-              Welcome Back ,Redirecting....
+              Welcome Back, Redirecting....
             </div>
           ) : (
             ""

@@ -1,6 +1,6 @@
 import React from "react";
 import Slider from "react-slick";
-import slide1 from "../../finalProject assets/images/en_dk_uae-hero-01-hp.1707484022.7463012.avif";
+import slide1 from "../../finalProject assets/images/images/slider-image-2.jpeg";
 import slide2 from "../../finalProject assets/images/images/banner20.jpg";
 import slide3 from "../../finalProject assets/images/slider-image-3.jpeg";
 import "./MainSlider.css"
