@@ -1,42 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
 import Loader from "../Loader/Loader";
-import { toast } from "react-toastify";
 import { wishListContext } from "../Context/WishListContext";
 import WishItem from "../WishItem/WishItem";
 import { Link } from "react-router-dom";
 
 export default function WhishList() {
-  const {
-    setWishCount,
-    addWishProduct,
-    setLoading,
-    getWhish,
-    allWishList,
-    isLoading,
-    removeWish,
-    setIsLoading,
-    setAllWishList,
-    wishCount,
-    loading,
-  } = useContext(wishListContext);
-  console.log(allWishList);
-
-  async function addWish(ID) {
-    setLoading(true);
-    let res = await addWishProduct(ID);
-    console.log(res);
-    if (res.data.status == "success") {
-      setWishCount((prev) => prev + 1);
-      getWhish();
-      setLoading(false);
-    } else {
-      toast.error("Something went wrong!");
-    }
-  }
-
+  const { allWishList, isLoading } = useContext(wishListContext);
   if (isLoading) return <Loader />;
-  if (allWishList.length == 0) {
+  if (allWishList.length === 0) {
     return (
       <div className="pt-5 d-flex justify-content-center align-items-center">
         <div className="text-center pb-5">
@@ -45,7 +17,7 @@ export default function WhishList() {
             <svg
               stroke="currentColor"
               fill="currentColor"
-              stroke-width="0"
+              strokeWidth="0"
               viewBox="0 0 24 24"
               className="text-4xl"
               height="1em"

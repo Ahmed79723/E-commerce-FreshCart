@@ -16,13 +16,8 @@ export default function Address() {
   const [isOnline, setisOnline] = useState(false);
   const { id } = useParams();
   const [Loading, setLoading] = useState(false);
-  // const [isFalse, setIsisFalse] = useState(false);
-  // const [errApiMsg] = useState(undefined);
-  // const nav = useNavigate();
 
   function onSubmit(values) {
-    // setLoading(true);
-    console.log(values);
     if (isCash) {
       cash(values);
       setIsCash(false);
@@ -34,10 +29,8 @@ export default function Address() {
   async function online(values) {
     setisOnline(true);
     let res = await pay(id, values);
-    console.log(res);
-    if (res.status == "success") {
+    if (res.status === "success") {
       setisOnline(false);
-      // setIsisFalse(false);
       setIsSuccess(true);
       toast.success("Order Placed Successfully!");
       setTimeout(function () {
@@ -45,13 +38,12 @@ export default function Address() {
       }, 1500);
     } else {
       setIsSuccess(false);
-      // setIsisFalse(true);
       setisOnline(false);
     }
   }
   async function cash(values) {
     setLoading(true);
-    let res = await cashPay(values);
+    await cashPay(values);
     setLoading(false);
   }
 
@@ -173,14 +165,6 @@ export default function Address() {
               )}
             </button>
           </div>
-
-          {/* {isFalse ? (
-            <div className="alert alert-danger text-center my-1 p-1">
-              {errApiMsg}
-            </div>
-          ) : (
-            ""
-          )} */}
           {isSuccess ? (
             <div className="alert alert-success my-1 p-1 text-center">
               Redirecting....

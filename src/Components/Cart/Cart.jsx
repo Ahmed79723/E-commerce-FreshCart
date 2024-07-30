@@ -1,6 +1,5 @@
-import React, { useContext, useDebugValue, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { cartContext } from "../Context/CartContextProvider";
-import { useQuery } from "react-query";
 import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -8,34 +7,6 @@ import Item from "../Item/Item";
 import { Helmet } from "react-helmet";
 
 export default function Cart() {
-  // const { getCart, deleteCartItem, setCounter } = useContext(cartContext);
-  // const [Data, setData] = useState(null);
-  // let { data, isLoading } = useQuery("getCart", getCart);
-  // console.log(data?.data);
-  // setData(data?.data)
-  // let response = data?.data;
-  // let response;
-  // useEffect(() => {
-  //   (async () => {
-  //     await getCart();
-  //     // response = res?.data;
-  //     setData(data?.data);
-  //     // console.log(res);
-  //   })();
-  // }, []);
-  // async function deleteProduct(id) {
-  //   let res = await deleteCartItem(id);
-  //   console.log(res);
-  //   if (res.status == "success") {
-  //     toast.error("Product deleted successfully");
-  //     setCounter(res.numOfCartItems);
-  //     getCart(id);
-  //     data = res.data;
-  //     setData(data);
-  //   }
-  // }
-  // if (isLoading || !data) return <Loader />;
-  // !--------------------------------|Eng Ahmed Abel Muti Code|--------------------------------------------
   let {
     totalCartPrice,
     allProducts,
@@ -45,11 +16,7 @@ export default function Cart() {
     setCounter,
     setTotalCartPrice,
     setAllProducts,
-    // getCart,
   } = useContext(cartContext);
-  // console.log(allProducts);
-  // let [data, setData] = useState(null);
-  // let [Loading, setLoading] = useState(true);
 
   async function myClearCart() {
     const res = await clearCart();
@@ -64,7 +31,7 @@ export default function Cart() {
   }
 
   if (Loading) return <Loader />;
-  if (allProducts == null || counter == 0) {
+  if (allProducts == null || counter === 0) {
     return (
       <div className="pt-5 d-flex justify-content-center align-items-center">
         <div className="text-center pb-5">
@@ -73,9 +40,9 @@ export default function Cart() {
             <svg
               stroke="currentColor"
               fill="currentColor"
-              stroke-width="0"
+              strokeWidth="0"
               viewBox="0 0 24 24"
-              class="text-4xl"
+              className="text-4xl"
               height="1em"
               width="1em"
               xmlns="http://www.w3.org/2000/svg"
@@ -101,10 +68,7 @@ export default function Cart() {
         <div className="CART mt-5 bg-main-light py-1 px-3 rounded-3 overflow-hidden">
           <h2 className="mt-5">Shop Cart: </h2>
           <div className="d-flex justify-content-between border-bottom">
-            <p className="text-main">
-              {/* Total Cart Price: {data?.data.totalCartPrice} EGP */}
-              Total Cart Price: {totalCartPrice} EGP
-            </p>
+            <p className="text-main">Total Cart Price: {totalCartPrice} EGP</p>
             <button
               className="btn btn-outline-danger mb-3"
               onClick={myClearCart}

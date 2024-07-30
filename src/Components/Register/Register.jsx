@@ -1,15 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
+import Cookies from "js-cookie";
 
 export default function Register() {
-  // const [NameInput, setNameInput] = useState("");
-  // let handleNameChange = (NameInput) => {
-  //   setNameInput(NameInput);
-  // };
   const [isSuccess, setisSuccess] = useState(false);
   const [isFalse, setisFalse] = useState(false);
   const [Loading, setLoading] = useState(false);
@@ -18,18 +15,16 @@ export default function Register() {
   let navigate = useNavigate();
   async function sendData(user) {
     setLoading(true);
-    const res = await axios
+    await axios
       .post("https://ecommerce.routemisr.com/api/v1/auth/signup", user)
       .then((x) => {
-        if (x.data.message == "success") {
-          console.log(x.data);
+        if (x.data.message === "success") {
           setisSuccess(true);
           setisFalse(false);
           setLoading(false);
           setTimeout(function () {
             navigate("/login");
           }, 2000);
-          // navigate('/Login')
         }
       })
       .catch((err) => {
@@ -42,8 +37,8 @@ export default function Register() {
   }
 
   function onSubmit(values) {
-    console.log(values);
     sendData(values);
+    Cookies.set("userInfo", JSON.stringify(values));
   }
   const userData = {
     name: "",
@@ -76,29 +71,6 @@ export default function Register() {
     initialValues: userData,
     onSubmit,
     validationSchema: mySchema,
-    // validate: function (values) {
-    //   const errors = {};
-    //   const nameRegex = /^[A-Z][a-z]{2,7}$/;
-    //   if (!nameRegex.test(values.name)) {
-    //     errors.name =
-    //       "Invalid Name ,name must contains 3-8 letters & start with Capital Letter ";
-    //   }
-    //   if (!values.email.includes("@") || !values.email.includes(".com")) {
-    //     errors.email = "Invalid Email";
-    //   }
-    //   const phoneRegex = /^01[0125][0-9]{8}$/;
-    //   if (!phoneRegex.test(values.phone)) {
-    //     errors.phone = "Invalid Phone Number";
-    //   }
-    //   if (values.password.length < 6 || values.password.length > 12) {
-    //     errors.password = "Password should be between 6 and 12 characters";
-    //   }
-    //   if (values.password !== values.rePassword || values.password == "") {
-    //     errors.rePassword = "Passwords don't match";
-    //   }
-    //   console.log(errors);
-    //   return errors;
-    // },
   });
   return (
     <>

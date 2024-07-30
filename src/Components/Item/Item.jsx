@@ -3,44 +3,23 @@ import { cartContext } from "../Context/CartContextProvider";
 import { toast } from "react-toastify";
 
 export default function Item({ product }) {
-  console.log(product);
   const { deleteCartItem, updateQty, getCart } = useContext(cartContext);
   let [Removing, setRemoving] = useState(false);
-  // let [productQty, setProductQty] = useState(0);
-  // useEffect(() => {
-  //   (async () => {
-  //     let data = await getCart();
-  //     if (data?.response?.data.statusMsg == "fail") {
-  //       setData(null);
-  //     } else {
-  //       setData(data);
-  //     }
-  //     // console.log(data);
-  //     setLoading(false);
-  //   })();
-  // }, []);
-  
   async function deleteProduct(id) {
     setRemoving(true);
     let res = await deleteCartItem(id);
-    console.log(res);
-    if (res.status == "success") {
+    if (res.status === "success") {
       toast.warning("Product deleted successfully");
-      // setCounter(res.numOfCartItems);
       setRemoving(false);
       getCart();
-      // setData(res);
     }
   }
 
   async function updateCartQTY(productId, count) {
     let res = await updateQty(productId, count);
-    console.log(res);
     if (res.status == "success") {
       getCart();
       toast.success("Product Updated successfully");
-      // setCounter(res.numOfCartItems);
-      // setData(res);
     } else {
       toast.error("An Error Ocurred");
     }
@@ -57,7 +36,7 @@ export default function Item({ product }) {
             <h4>{product.product.title.split(" ").splice(0, 2).join(" ")}</h4>
             <p className="text-main m-0">Price: {product.price} EGP</p>
             <button
-            disabled={Removing}
+              disabled={Removing}
               onClick={() => {
                 deleteProduct(product.product._id);
               }}

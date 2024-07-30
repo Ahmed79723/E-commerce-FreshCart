@@ -2,9 +2,8 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { authContext } from "./AuthContextProvider";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 export let cartContext = createContext();
-// import { useQuery } from "react-query";
 
 export default function CartContextProvider({ children }) {
   const [counter, setCounter] = useState(0);
@@ -15,15 +14,13 @@ export default function CartContextProvider({ children }) {
   const [CartOwner, setCartOwner] = useState(null);
   let [Loading, setLoading] = useState(true);
   const [BtnLoading, setBtnLoading] = useState(false);
-  //   const cartQuery = useQuery("addToCart", addToCart);
 
   function getCart() {
     return axios
       .get("https://ecommerce.routemisr.com/api/v1/cart", {
-        headers: { token: localStorage.getItem("tkn") },
+        headers: { token: Cookies.get("tkn") },
       })
       .then(({ data }) => {
-        console.log("res", data.data);
         setAllProducts(data.data);
         setCounter(data.numOfCartItems);
         setTotalCartPrice(data.data.totalCartPrice);
@@ -36,7 +33,6 @@ export default function CartContextProvider({ children }) {
         if (err.response?.data.message) {
           const fullString = err.response?.data?.message;
           const [body, ID] = fullString.split(": ");
-          // console.log(ID);
           setCartOwner(ID);
         }
         setLoading(false);
@@ -53,11 +49,11 @@ export default function CartContextProvider({ children }) {
         const { data } = await axios.post(
           "https://ecommerce.routemisr.com/api/v1/cart",
           { productId },
-          { headers: { token: localStorage.getItem("tkn") } }
+          { headers: { token: Cookies.get("tkn") } }
         );
         toast.success("Product Added successfully to Cart");
         getCart();
-        return data
+        return data;
       } catch (err) {
         // Handle errors for non-successful responses
         if (err.response.data.message) {
@@ -67,13 +63,15 @@ export default function CartContextProvider({ children }) {
           console.error("failed(network):", err.message);
         }
       }
+    } else {
+      toast.error("Please Log In First");
     }
   }
 
   function deleteCartItem(productId) {
     return axios
       .delete(`https://ecommerce.routemisr.com/api/v1/cart/${productId}`, {
-        headers: { token: localStorage.getItem("tkn") },
+        headers: { token: Cookies.get("tkn") },
       })
       .then(({ data }) => data)
       .catch((err) => err);
@@ -85,11 +83,27 @@ export default function CartContextProvider({ children }) {
         `https://ecommerce.routemisr.com/api/v1/cart/${productId}`,
         { count },
         {
-          headers: { token: localStorage.getItem("tkn") },
+          headers: { token: Cookies.get("tkn") },
         }
       )
       .then(({ data }) => data)
       .catch((err) => err);
+  }
+
+  async function clearCart() {
+    const res = await axios
+      .delete(`https://ecommerce.routemisr.com/api/v1/cart`, {
+        headers: { token: Cookies.get("tkn") },
+      })
+      .then(() => {
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
+    console.log(res);
+    return res;
   }
 
   function pay(cartId, shippingAddress) {
@@ -98,7 +112,7 @@ export default function CartContextProvider({ children }) {
         `https://ecommerce.routemisr.com/api/v1/orders/checkout-session/${cartId}`,
         { shippingAddress },
         {
-          headers: { token: localStorage.getItem("tkn") },
+          headers: { token: Cookies.get("tkn") },
         }
       )
       .then(({ data }) => data)
@@ -111,11 +125,11 @@ export default function CartContextProvider({ children }) {
         `https://ecommerce.routemisr.com/api/v1/orders/${CartID}`,
         { shippingAddress },
         {
-          headers: { token: localStorage.getItem("tkn") },
+          headers: { token: Cookies.get("tkn") },
         }
       )
       .then((res) => {
-        if (res.data.status == "success") {
+        if (res.data.status === "success") {
           toast.success("Order Placed Successfully!");
           setCounter(0);
           setTotalCartPrice(0);
@@ -127,22 +141,6 @@ export default function CartContextProvider({ children }) {
         }
       })
       .catch((err) => console.log(err));
-  }
-
-  async function clearCart() {
-    const res = await axios
-      .delete(`https://ecommerce.routemisr.com/api/v1/cart`, {
-        headers: { token: localStorage.getItem("tkn") },
-      })
-      .then(() => {
-        return true;
-      })
-      .catch((err) => {
-        console.log(err);
-        return false;
-      });
-    console.log(res);
-    return res;
   }
 
   return (
@@ -161,7 +159,6 @@ export default function CartContextProvider({ children }) {
         CartID,
         cashPay,
         CartOwner,
-        setAllProducts,
         setAllProducts,
         setCartOwner,
         setCounter,

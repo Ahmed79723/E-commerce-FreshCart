@@ -1,28 +1,19 @@
 import React, { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { cartContext } from "../Context/CartContextProvider";
-import { toast } from "react-toastify";
-import { authContext } from "../Context/AuthContextProvider";
 import { wishListContext } from "../Context/WishListContext";
-import Cookies from "js-cookie";
-
-// import { useQuery } from "react-query";
+import { useEffect } from "react";
 
 export default function Product({ item }) {
-  const { setCounter, addToCart, setBtnLoading, getWhish } =
-    useContext(cartContext);
-  const { Token } = useContext(authContext);
+  const { addToCart } = useContext(cartContext);
   const { addWishProduct, removeWish } = useContext(wishListContext);
-  const nv = useNavigate();
   let [add2Wish, setAdd2Wish] = useState(false);
+  let [add2Cart, setAdd2Cart] = useState(false);
   let [flag, setFlag] = useState(false);
 
-  const truncateTitle = (title, numWords) => {
-    const words = title.split(" ");
-    return words.length > numWords
-      ? words.slice(0, numWords).join(" ") + "..."
-      : title;
-  };
+  useEffect(() => {
+    setFlag(localStorage.getItem("MyWhishListIds")?.includes(item.id));
+  }, []);
 
   async function addWish(id) {
     setAdd2Wish(true);
@@ -37,34 +28,24 @@ export default function Product({ item }) {
   }
 
   async function addProductToCart(id) {
-    if (Token) {
-      setAdd2Wish(true);
-      let res = await addToCart(id);
-      console.log(res);
-      if (res.status == "success") {
-        setBtnLoading(false);
-        setCounter(res.numOfCartItems);
-      }
-      setAdd2Wish(false);
-    } else {
-      toast.error("Please Log In First");
-      setAdd2Wish(false);
-      setTimeout(() => {
-        nv("/Login");
-      }, 1500);
-    }
+    setAdd2Cart(true);
+    await addToCart(id);
+    setAdd2Cart(false);
   }
-  // const { data, isLoading, isError } = useQuery(
-  //   "addToCart",
-  //   ()=>addToCart(item.id)
-  // );
-  // console.log(data?.data.data);
+
+  const truncateTitle = (title, numWords) => {
+    const words = title.split(" ");
+    return words.length > numWords
+      ? words.slice(0, numWords).join(" ") + "..."
+      : title;
+  };
   return (
     <>
       <div className="col-md-3 position-relative">
         <div className="product rounded-3 p-3 overflow-hidden">
-          <div id="whish-btn" className="rounded-circle position-absolute p-1">
-            <button
+          <div id="whish-btn" className="rounded-circle position-absolute">
+            <div
+              role="button"
               className={
                 flag
                   ? "rounded-circle border-0 bg-danger"
@@ -74,30 +55,38 @@ export default function Product({ item }) {
               onClick={() => {
                 if (!flag) {
                   addWish(item._id);
-                  Cookies.set("isWhishListed", "true");
                   setFlag(true);
                 } else {
                   setFlag(false);
                   removeWishProduct(item._id);
-                  Cookies.set("isWhishListed", "false");
                 }
-                console.log(Cookies.get("isWhishListed"));
               }}
             >
-              {add2Wish ? (
-                <i className="fa-solid fa-spin fa-spinner"></i>
-              ) : (
-                <i className="fa-solid fa-heart fa-lg"></i>
-              )}
-            </button>
+              <>
+                {add2Wish ? (
+                  <div className="d-flex justify-content-center align-items-center py-2 rounded-circle">
+                    <i className="fa-solid fa-spin fa-lg fa-spinner text-white py-2 px-2"></i>
+                  </div>
+                ) : (
+                  <div>
+                    {flag ? (
+                      <div className="d-flex justify-content-center align-items-center py-2 rounded-circle">
+                        <i className="fa-solid fa-heart fa-lg py-2 px-2 text-white"></i>
+                      </div>
+                    ) : (
+                      <div className="d-flex justify-content-center align-items-center py-2 rounded-circle">
+                        <i className="fa-regular fa-heart fa-lg py-2 px-2"></i>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </>
+            </div>
           </div>
           <Link to={`/ProDetails/${item.id}`}>
             <img src={item.imageCover} className="w-100 rounded-5" alt="" />
             <span className="text-main font-sm">{item.category.name}</span>
-            <h6 className="my-1 fw-bold">
-              {/* {item.title.split(" ").splice(0, 3).join(" ") + "..."} */}
-              {truncateTitle(item.title, 3)}
-            </h6>
+            <h6 className="my-1 fw-bold">{truncateTitle(item.title, 3)}</h6>
             <div className="d-flex justify-content-between align-items-center my-2">
               <div className="price">{item.price} EGP</div>
               <div className="rate">
@@ -111,9 +100,9 @@ export default function Product({ item }) {
               addProductToCart(item.id);
             }}
             className="btn bg-main w-100 text-white"
-            disabled={add2Wish}
+            disabled={add2Cart}
           >
-            {add2Wish ? (
+            {add2Cart ? (
               <i className="fa-solid fa-spin fa-spinner text-white"></i>
             ) : (
               "Add to Cart"

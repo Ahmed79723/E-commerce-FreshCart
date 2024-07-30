@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { authContext } from "./AuthContextProvider";
+import Cookies from "js-cookie";
 export let wishListContext = createContext();
 
 export default function WishListContextProvider({ children }) {
@@ -16,10 +17,9 @@ export default function WishListContextProvider({ children }) {
   async function getWhish() {
     await axios
       .get("https://ecommerce.routemisr.com/api/v1/wishlist", {
-        headers: { token: localStorage.getItem("tkn") },
+        headers: { token: Cookies.get("tkn") },
       })
       .then(({ data }) => {
-        console.log("getWish", data);
         setAllWishList(data.data);
         setWishCount(data.count);
         setIsLoading(false);
@@ -36,18 +36,19 @@ export default function WishListContextProvider({ children }) {
   }, []);
 
   async function addWishProduct(productId) {
-    // setLoading(true);
     if (Token) {
       try {
         const res = await axios.post(
           "https://ecommerce.routemisr.com/api/v1/wishlist",
           { productId },
-          { headers: { token: localStorage.getItem("tkn") } }
+          { headers: { token: Cookies.get("tkn") } }
         );
         toast.success(res.data.message);
+        localStorage.setItem("MyWhishListIds", JSON.stringify(res.data.data));
         getWhish();
       } catch (err) {
         // Handle errors for non-successful responses
+        console.log(err);
         if (err.response.data.message) {
           toast.error(err.response.data.message);
         } else {
@@ -65,11 +66,12 @@ export default function WishListContextProvider({ children }) {
       const { data } = await axios.delete(
         `https://ecommerce.routemisr.com/api/v1/wishlist/${productId}`,
         {
-          headers: { token: localStorage.getItem("tkn") },
+          headers: { token: Cookies.get("tkn") },
         }
       );
       console.log(data);
       toast.warning("Product removed successfully from your wishlist");
+      localStorage.setItem("MyWhishListIds", JSON.stringify(data.data));
       getWhish();
       return data;
     } catch (err) {
@@ -83,7 +85,6 @@ export default function WishListContextProvider({ children }) {
     return await axios
       .get("https://ecommerce.routemisr.com/api/v1/categories")
       .then((data) => {
-        console.log(data.data);
         setAllCats(data.data.data);
         return allCats;
       })
@@ -95,13 +96,10 @@ export default function WishListContextProvider({ children }) {
     return axios
       .get(`https://ecommerce.routemisr.com/api/v1/categories/${id}`)
       .then((data) => {
-        console.log("1 cat", data.data);
         setOneCat(data.data.data);
-        console.log(oneCat);
         return data.data;
       })
       .catch((err) => {
-        // toast.error(err.errors.msg);
         console.log(err);
       });
   }

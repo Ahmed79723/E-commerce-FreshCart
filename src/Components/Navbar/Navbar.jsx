@@ -4,24 +4,30 @@ import Logo from "../../finalProject assets/images/freshcart-logo.svg";
 import { authContext } from "../Context/AuthContextProvider";
 import { cartContext } from "../Context/CartContextProvider";
 import { wishListContext } from "../Context/WishListContext";
+import $ from "jquery";
+import Cookies from "js-cookie";
 
 export default function Navbar() {
   const { setToken, userInfo } = useContext(authContext);
-  const { counter, setCounter, getCart } = useContext(cartContext);
-  const { wishCount } = useContext(wishListContext);
+  const { counter, setCounter } = useContext(cartContext);
+  const { wishCount, setWishCount } = useContext(wishListContext);
   const navigate = useNavigate();
   function signOut() {
     setToken(null);
-    localStorage.removeItem("tkn");
+    localStorage.clear();
+    Cookies.remove("userInfo");
+    Cookies.remove("tkn");
+    setCounter(0);
+    setWishCount(0);
     navigate("/Login");
   }
-  // useEffect(() => {
-  //   (async () => {
-  //     let res = await getCart();
-  //     console.log(res);
-  //     setCounter(res.numOfCartItems);
-  //   })();
-  // },[]);
+  useEffect(() => {
+    $("a").css("width", "fit-content");
+    $("li").on("click", () => {
+      $("#navbarSupportedContent").removeClass("show");
+      $(".navbar-toggler").addClass("collapsed").attr("aria-expanded", "false");
+    });
+  }, []);
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-main-light py-2 position-fixed z-3 w-100">
@@ -47,9 +53,6 @@ export default function Navbar() {
                   Home
                 </NavLink>
               </li>
-              {/* <li className="nav-item">
-          <NavLink className="nav-link" to="/Cart">Cart</NavLink>
-        </li> */}
               <li className="nav-item">
                 <NavLink className="nav-link" to="/Products">
                   Products
@@ -108,31 +111,10 @@ export default function Navbar() {
               </li>
               <li>
                 <NavLink className="nav-link" onClick={signOut}>
-                  {localStorage.getItem("tkn") ? "SignOut" : "log In"}
+                  {Cookies.get("tkn") ? "SignOut" : "log In"}
                 </NavLink>
               </li>
             </ul>
-            {/* <ul className='navbar-nav d-flex list-unstyled'>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-facebook'></i></Link>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-instagram'></i></Link>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-twitter'></i></Link>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-linkedin'></i></Link>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-tiktok'></i></Link>
-  <Link className='text-black text-decoration-none'><i className='me-3 fa-brands fa-youtube'></i></Link>
-</ul>
-      <ul className="navbar-nav d-flex align-items-center justify-content-center ms-auto list-unstyled">
-        <li className="nav-item">
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link mx-1" to="/Login">LogIn</NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link  mx-1" to="/Register">Register</NavLink>
-        </li>      
-        <li className="nav-item">
-          <span className="nav-link  mx-1">LogOut</span>
-        </li>
-      </ul> */}
           </div>
         </div>
       </nav>

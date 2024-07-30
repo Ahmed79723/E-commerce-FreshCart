@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
 import { wishListContext } from "../Context/WishListContext";
 import Loader from "../Loader/Loader";
 
 export default function CatDetails() {
   const { oneCat } = useContext(wishListContext);
-  // const { id } = useParams();
   if (!oneCat) {
     return <Loader />;
   }

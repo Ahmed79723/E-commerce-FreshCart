@@ -7,30 +7,22 @@ import Loader from "../Loader/Loader";
 import BrandItem from "../BrandItem/BrandItem";
 
 export default function Brands() {
-  // const [brandLoad, setBrandLoad] = useState(false);
-  // const [brand, setBrand] = useState([]);
   function getBrands() {
     return axios.get("https://ecommerce.routemisr.com/api/v1/brands");
   }
 
   async function getSpecificBrand(id) {
-    // setBrandLoad(true);
     await axios
       .get(`https://ecommerce.routemisr.com/api/v1/brands/${id}`)
       .then((res) => {
-        console.log("fun", res);
-        // setBrandLoad(false);
         return res.data.data;
-        // setBrand(res.data.data)
       })
       .catch((err) => {
         console.log(err);
-        // setBrandLoad(false);
       });
   }
 
   const { data, isLoading, isError } = useQuery("getBrands", getBrands);
-  console.log(data);
   if (isLoading) return <Loader />;
   if (isError) {
     return (

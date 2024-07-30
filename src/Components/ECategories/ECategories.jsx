@@ -1,18 +1,11 @@
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
-import axios from "axios";
-import { useQuery } from "react-query";
 import Loader from "../Loader/Loader";
 import { wishListContext } from "../Context/WishListContext";
 import { Link } from "react-router-dom";
 
 export default function ECategories() {
   const { getOneCat, allCats } = useContext(wishListContext);
-
-  // async function eFetchCategories() {
-  //   return await axios.get("https://ecommerce.routemisr.com/api/v1/categories");
-  // }
-  // const { isLoading, data } = useQuery("eFetchCategories", eFetchCategories);
 
   if (!allCats) {
     return <Loader />;

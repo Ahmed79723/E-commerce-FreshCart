@@ -1,37 +1,45 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { authContext } from "../Context/AuthContextProvider";
 import { Helmet } from "react-helmet";
+import { cartContext } from "../Context/CartContextProvider.js";
+import { wishListContext } from "../Context/WishListContext.js";
+import Cookies from "js-cookie";
 
 export default function Login() {
-  const { setToken, getUserData, userInfo } = useContext(authContext);
+  const { setToken, getUserData } = useContext(authContext);
   const [isSuccess, setisSuccess] = useState(false);
   const [isFalse, setisFalse] = useState(false);
   const [Loading, setLoading] = useState(false);
   const [errApiMsg, seterrApiMsg] = useState(undefined);
   let navigate = useNavigate();
+  const { getCart } = useContext(cartContext);
+  const { getWhish } = useContext(wishListContext);
+
+  useEffect(() => {
+    getCart();
+    getWhish();
+  }, []);
 
   async function sendData(user) {
     setLoading(true);
-    const res = await axios
+    await axios
       .post("https://ecommerce.routemisr.com/api/v1/auth/signin", user)
       .then((x) => {
-        if (x.data.message == "success") {
-          console.log(x.data);
+        if (x.data.message === "success") {
           setisSuccess(true);
           setLoading(false);
           setisFalse(false);
-          localStorage.setItem("tkn", x.data.token);
+          Cookies.set("tkn", x.data.token);
           getUserData();
           setToken(x.data.token);
 
           setTimeout(function () {
             navigate("/Home");
           }, 2000);
-          // navigate("/Home");
         }
       })
       .catch((err) => {
@@ -39,7 +47,7 @@ export default function Login() {
         setisFalse(true);
         setLoading(false);
         setisSuccess(false);
-        seterrApiMsg(err.response.data.message);
+        seterrApiMsg(err.message);
       });
   }
   const userData = {
@@ -55,7 +63,6 @@ export default function Login() {
   });
 
   function onSubmit(values) {
-    console.log("from login", values);
     sendData(values);
   }
 
@@ -154,7 +161,10 @@ export default function Login() {
           )}
         </form>
         <div className="d-flex justify-content-between align-content-center mt-2 mx-auto text-center">
-          <span className="bg-dark w-25 ms-auto align-self-center" style={{height:'2px'}}></span>
+          <span
+            className="bg-dark w-25 ms-auto align-self-center"
+            style={{ height: "2px" }}
+          ></span>
           <Link
             className="f-pass fw-bold text-center align-self-center px-2"
             to={"/Register"}
@@ -162,7 +172,10 @@ export default function Login() {
             <span className="text-nowrap">Don't have an Account, </span>
             <span className="text-nowrap">Sign Up?</span>
           </Link>
-          <span className="bg-dark w-25 me-auto align-self-center " style={{height:'2px'}}></span>
+          <span
+            className="bg-dark w-25 me-auto align-self-center "
+            style={{ height: "2px" }}
+          ></span>
         </div>
       </div>
     </>

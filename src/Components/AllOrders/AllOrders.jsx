@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { cartContext } from "../Context/CartContextProvider";
 import axios from "axios";
 import Loader from "../Loader/Loader";
@@ -10,18 +9,15 @@ import { toast } from "react-toastify";
 export default function AllOrders() {
   const [allOrders, setAllOrders] = useState(null);
   const { CartOwner, Loading, setLoading } = useContext(cartContext);
-console.log(CartOwner);
   async function getOrders() {
     setLoading(true);
     await axios
       .get(`https://ecommerce.routemisr.com/api/v1/orders/user/${CartOwner}`)
       .then(({ data }) => {
-        console.log("order response", data);
         setAllOrders(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         toast.error(err.response.data.message);
         setLoading(false);
       });
@@ -29,13 +25,11 @@ console.log(CartOwner);
   useEffect(() => {
     getOrders();
   }, []);
-  // const { data, isError, isLoading } = useQuery("getOrders", getOrders);
-  // console.log("orders query", data?.data, isLoading);
   if (Loading) {
     return <Loader />;
   }
 
-  if (allOrders == null || allOrders.length == 0) {
+  if (allOrders == null || allOrders.length === 0) {
     return (
       <div className="pt-5">
         <h2 className="h1 text-center mt-5 py-5 text-main">
@@ -80,8 +74,8 @@ console.log(CartOwner);
                       );
                     })}
                   </div>
-                  <div className="col-md-12 p-3 ordr-brdr d-flex justify-content-between align-items-center">
-                    <div>
+                  <div className="row p-3 gy-3 ordr-brdr justify-content-between align-items-center">
+                    <div className="text-muted col-md-6">
                       <p className="text-main m-0">
                         <span className="text-black fw-bold">Order ID: </span>
                         {order._id}
@@ -98,12 +92,9 @@ console.log(CartOwner);
                         </span>
                         {order.paymentMethodType}
                       </p>
-                      {/* <h4>
-                        {order.order.title.split(" ").splice(0, 2).join(" ")}
-                      </h4> */}
                     </div>
-                    <div className="Shipping">
-                      <strong>Shipping to</strong>:
+                    <div className="col-md-6 Shipping">
+                      <strong className="text-main">Shipping to</strong>:
                       <br />
                       <strong>Address</strong>: {order.shippingAddress?.details}
                       <br />

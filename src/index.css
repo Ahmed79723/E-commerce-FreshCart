@@ -130,3 +130,22 @@ input{
 {
   width: 100px;
 }
+/* **********scrollBar********** */
+/* Customize the overall scrollbar */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar track */
+  height: 12px; /* Height of the scrollbar track */
+}
+
+/* Customize the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #0aad0a; /* Thumb background color */
+  border-radius: 6px; /* Thumb border radius */
+  border: 2px solid #ffffff; /* Thumb border */
+}
+
+/* Customize the scrollbar track */
+::-webkit-scrollbar-track {
+  background-color: #f0f3f2; /* Track background color */
+  border-radius: 6px; /* Track border radius */
+}

@@ -3,8 +3,18 @@ import { Outlet } from "react-router-dom";
 import Logo from "../../finalProject assets/images/freshcart-logo.svg";
 import { Link, NavLink } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import $ from "jquery";
+import { useEffect } from "react";
 
 export default function AuthLayout() {
+  useEffect(() => {
+    $("a").css("width", "fit-content");
+    $("li").on("click", () => {
+      $("#navbarSupportedContent").removeClass("show");
+      $(".navbar-toggler").addClass("collapsed").attr("aria-expanded", "false");
+    });
+  }, []);
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-body-tertiary py-2">

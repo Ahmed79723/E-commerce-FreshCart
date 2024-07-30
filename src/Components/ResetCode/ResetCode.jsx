@@ -11,17 +11,16 @@ export default function ResetCode() {
   const nv = useNavigate();
 
   async function ResetCode(resetCode) {
-    setIsSuccess(true)
+    setIsSuccess(true);
     await axios
       .post(`https://ecommerce.routemisr.com/api/v1/auth/verifyResetCode`, {
         resetCode,
       })
       .then(function (response) {
-        console.log(response);
         toast.success(response.data.message);
         setIsSuccess(false);
         setTimeout(() => {
-          nv("/ResetPass")
+          nv("/ResetPass");
         }, 1000);
       })
       .catch(function (err) {
@@ -33,7 +32,6 @@ export default function ResetCode() {
 
   function onSubmit(values) {
     ResetCode(values.code);
-    console.log("from code", values);
   }
   const userCode = {
     code: "",

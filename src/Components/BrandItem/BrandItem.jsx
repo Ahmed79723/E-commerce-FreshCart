@@ -39,9 +39,7 @@ export default function BrandItem({ item, fun }) {
               </div>
               <div className="modal-body">
                 <div className="d-flex flex-column align-items-center justify-content-between">
-                  <h3 className="fw-bolder text-main pt-5">
-                    {item.name}
-                  </h3>
+                  <h3 className="fw-bolder text-main pt-5">{item.name}</h3>
                   <img src={item.image} alt={item.slug} className="w-100" />
                   <p>
                     Lorem ipsum dolor sit amet consectetur, adipisicing elit.

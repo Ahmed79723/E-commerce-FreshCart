@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 export let authContext = createContext();
 
 export default function AuthContextProvider({ children }) {
@@ -8,25 +9,21 @@ export default function AuthContextProvider({ children }) {
   let token;
 
   useEffect(function () {
-    if (localStorage.getItem("tkn")) {
-      token = localStorage.getItem("tkn");
+    if (Cookies.get("tkn")) {
+      token = Cookies.get("tkn");
       setToken(token);
       setUserInfo(jwtDecode(token));
       getUserData();
-      // console.log(token, Token);
     } else {
       token = null;
     }
   }, []);
 
   function getUserData() {
-    const userInfo = jwtDecode(localStorage.getItem("tkn"));
+    const userInfo = jwtDecode(Cookies.get("tkn"));
     setUserInfo(userInfo);
-    console.log(userInfo);
   }
-  //   if (token == undefined) {
-  //     return <AuthLayout />;
-  //   }
+
   return (
     <authContext.Provider
       value={{
@@ -36,7 +33,6 @@ export default function AuthContextProvider({ children }) {
         userInfo,
       }}
     >
-      {/* {(Token||token)? {children}:<AuthLayout/>} */}
       {children}
     </authContext.Provider>
   );

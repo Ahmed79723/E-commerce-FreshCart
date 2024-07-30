@@ -1,28 +1,11 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import Slider from "react-slick";
-import { useQuery } from "react-query";
 import Loader from "../Loader/Loader";
 import { wishListContext } from "../Context/WishListContext";
 import { Link } from "react-router-dom";
 
 export default function Categories() {
-  // const [Categories, setCategories] = useState([]);
-  // async function getCategories() {
-  //   let { data } = await axios.get(
-  //     "https://ecommerce.routemisr.com/api/v1/categories"
-  //   );
-  //   setCategories(data.data);
-  //   console.log(data.data);
-  // }
-  // useEffect(() => {
-  //   getCategories();
-  // }, []);
-
   const { getOneCat, allCats } = useContext(wishListContext);
-
-  // const { isLoading, data } = useQuery("categories", fetchCategories);
-  console.log(allCats);
   var settings = {
     dots: false,
     infinite: true,
@@ -70,11 +53,11 @@ export default function Categories() {
             {allCats.map((item, index) => {
               return (
                 <Link
-                role="button"
-                onClick={() => {
-                  getOneCat(item._id);
-                }}
-                to={`/CatDetails/${item._id}`}
+                  role="button"
+                  onClick={() => {
+                    getOneCat(item._id);
+                  }}
+                  to={`/CatDetails/${item._id}`}
                   className="px-1"
                   key={index}
                 >

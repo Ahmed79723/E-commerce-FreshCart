@@ -18,11 +18,10 @@ export default function ResetPass() {
         newPassword,
       })
       .then((res) => {
-        console.log("from reset", res);
         if (res.data.token) {
           toast.success("Password updated successfully!");
           setTimeout(() => {
-            nv("/Login")
+            nv("/Login");
           }, 1000);
           setIsUpdated(false);
         }
@@ -36,7 +35,6 @@ export default function ResetPass() {
 
   function onSubmit(values) {
     ResetPass(values.email, values.newPassword);
-    console.log("from update", values);
   }
   const userData = {
     email: "",

@@ -6,12 +6,17 @@ import * as yup from "yup";
 import axios from "axios";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 export default function Profile() {
   const [updateData, setUpdateData] = useState(false);
   const [updatePass, setUpdatePass] = useState(false);
   const { userInfo } = useContext(authContext);
-  console.log(userInfo);
+  const moreInfo = JSON.parse(Cookies.get("userInfo") || "{}");
+  const [showPass, setShowPass] = useState(false);
+  let updatedDataC = JSON.parse(Cookies.get("updatedData") || null);
+  let updatedPassC = JSON.parse(Cookies.get("updatedPass") || null);
+  console.log(JSON.parse(Cookies.get("userInfo") || "{}"));
   // ^----------------------------------------------------------------------------------------------------
   function updateUserData(name, email, phone) {
     setUpdateData(true);
@@ -24,10 +29,14 @@ export default function Profile() {
         }
       )
       .then((res) => {
-        console.log("1", res);
-        if (res.data.message == "success") {
+        if (res.data.message === "success") {
           toast.success("Info Updated Successfully!");
           setUpdateData(false);
+          let updatedData = { name, email, phone };
+          updatedDataC = Cookies.set(
+            "updatedData",
+            JSON.stringify(updatedData)
+          );
         }
       })
       .catch((err) => {
@@ -38,7 +47,6 @@ export default function Profile() {
   }
 
   function onSubmit(values) {
-    console.log("1", values);
     updateUserData(values.name, values.email, values.phone);
   }
 
@@ -76,10 +84,14 @@ export default function Profile() {
         }
       )
       .then((res) => {
-        console.log("2", res);
-        if (res.data.message == "success") {
+        if (res.data.message === "success") {
           toast.success("Password Updated Successfully!");
           setUpdatePass(false);
+          let updatedPass = { currentPassword, password, rePassword };
+          updatedPassC = Cookies.set(
+            "updatedPass",
+            JSON.stringify(updatedPass)
+          );
           setTimeout(() => {
             window.location = "http://localhost:3000/#/Login";
           }, 1000);
@@ -93,7 +105,6 @@ export default function Profile() {
   }
 
   function onSubmit1(values) {
-    console.log("2", values);
     changePass(values.currentPassword, values.password, values.rePassword);
   }
 
@@ -137,10 +148,60 @@ export default function Profile() {
           <div className="d-flex px-5">
             <ul className="list-unstyled border-black w-100">
               <li className="py-3 border-bottom">
-                <p className="text-black">Name: {userInfo.name}</p>
+                <p className="text-black">
+                  <span className="fw-bold">Name:</span>{" "}
+                  {updatedDataC ? updatedDataC.name : userInfo.name}
+                </p>
               </li>
               <li className="py-3 border-bottom">
-                <p className="text-black">ID: {userInfo.id}</p>
+                <p className="text-black">
+                  <span className="fw-bold">Email:</span>{" "}
+                  {updatedDataC ? updatedDataC.email : moreInfo?.email}
+                </p>
+              </li>
+              <li className="py-3 border-bottom">
+                <p className="text-black">
+                  <span className="fw-bold">Phone:</span>{" "}
+                  {updatedDataC ? updatedDataC.phone : moreInfo?.phone}
+                </p>
+              </li>
+              <li className="py-3 border-bottom">
+                <p className="text-black">
+                  <span className="fw-bold">ID:</span> {userInfo.id}
+                </p>
+              </li>
+              <li className="py-3 border-bottom">
+                <div className="text-black d-flex justify-content-between w-50 pe-5">
+                  <p className="text-nowrap me-2">
+                    <span className="fw-bold">Password: </span>
+                    {showPass ? (
+                      <>
+                        {updatedPassC
+                          ? updatedPassC?.password
+                          : moreInfo?.Password}
+                      </>
+                    ) : (
+                      "**********"
+                    )}
+                  </p>
+                  {showPass ? (
+                    <i
+                      className="fa-solid fa-eye-slash me-5"
+                      role="button"
+                      onClick={() => {
+                        setShowPass(false);
+                      }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="fa-solid fa-eye me-5"
+                      role="button"
+                      onClick={() => {
+                        setShowPass(true);
+                      }}
+                    ></i>
+                  )}
+                </div>
               </li>
             </ul>
           </div>
@@ -236,20 +297,6 @@ export default function Profile() {
                       "Update Your Info"
                     )}
                   </button>
-                  {/* {isFalse ? (
-                    <div className="alert alert-danger text-center my-1 p-1">
-                      {errApiMsg}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {isSuccess ? (
-                    <div className="alert alert-success my-1 p-1 text-center">
-                      Account Created Successfully!
-                    </div>
-                  ) : (
-                    ""
-                  )} */}
                 </form>
               </div>
               {/* *--------------------------------------------from1----------------------------------------------- */}
@@ -348,20 +395,6 @@ export default function Profile() {
                       "Update Password"
                     )}
                   </button>
-                  {/* {isFalse ? (
-                    <div className="alert alert-danger text-center my-1 p-1">
-                      {errApiMsg}
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                  {isSuccess ? (
-                    <div className="alert alert-success my-1 p-1 text-center">
-                      Password Updated Successfully!
-                    </div>
-                  ) : (
-                    ""
-                  )} */}
                 </form>
               </div>
             </div>

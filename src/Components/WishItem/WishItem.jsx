@@ -3,16 +3,8 @@ import { wishListContext } from "../Context/WishListContext";
 import { cartContext } from "../Context/CartContextProvider";
 import { toast } from "react-toastify";
 
-export default function ({ item }) {
-  const {
-    removeWish,
-    getWhish,
-    wishCount,
-    setWishCount,
-    addWishProduct,
-    setIsLoading,
-    setAllWishList,
-  } = useContext(wishListContext);
+export default function WishItem({ item }) {
+  const { removeWish, getWhish } = useContext(wishListContext);
   const { addToCart } = useContext(cartContext);
   const [Delete, setDelete] = useState(false);
   const [wishLoad, setWishLoad] = useState(false);
@@ -20,8 +12,7 @@ export default function ({ item }) {
   async function deleteProFromWish(id) {
     setDelete(true);
     let res = await removeWish(id);
-    console.log("delete-24-wish", res);
-    if (res.status == "success") {
+    if (res.status === "success") {
       toast.success(res.data.message);
       getWhish();
       setDelete(false);
@@ -31,7 +22,7 @@ export default function ({ item }) {
   async function addWishToCart(id) {
     setWishLoad(true);
     let res = await addToCart(id);
-    if (res.status == "success") {
+    if (res.status === "success") {
       deleteProFromWish(id);
       setWishLoad(false);
     } else {
@@ -42,7 +33,7 @@ export default function ({ item }) {
 
   return (
     <>
-      <div className="row align-items-center py-3 border-bottom">
+      <div className="row gy-3 align-items-center py-3 border-bottom">
         <div className="col-md-1">
           <img src={item.imageCover} className="w-100" alt="" />
         </div>

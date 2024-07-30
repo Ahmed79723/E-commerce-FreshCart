@@ -20,7 +20,7 @@ export default function ForgotPass() {
         toast.success(response.data.message);
         setIsSuccess(false);
         setTimeout(() => {
-          nv("/ResetCode")
+          nv("/ResetCode");
         }, 1000);
       })
       .catch(function (err) {
@@ -31,7 +31,6 @@ export default function ForgotPass() {
 
   function onSubmit(values) {
     forgotPassword(values.email);
-    console.log("from forgot", values);
   }
   const userEmail = {
     email: "",
